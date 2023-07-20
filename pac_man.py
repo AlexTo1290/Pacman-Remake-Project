@@ -630,13 +630,13 @@ class Pinky(Ghost):
         self.left_frame2 = PhotoImage(file="images/Ghost/pink_left_frame2.png")
 
         self.right_frame1 = PhotoImage(file="images/Ghost/pink_right_frame1.png")
-        self.right_frame1 = PhotoImage(file="images/Ghost/pink_right_frame2.png")
+        self.right_frame2 = PhotoImage(file="images/Ghost/pink_right_frame2.png")
 
         self.up_frame1 = PhotoImage(file="images/Ghost/pink_up_frame1.png")
         self.up_frame2 = PhotoImage(file="images/Ghost/pink_up_frame2.png")
 
         self.down_frame1 = PhotoImage(file="images/Ghost/pink_down_frame1.png")
-        self.down_frame1 = PhotoImage(file="images/Ghost/pink_down_frame2.png")
+        self.down_frame2 = PhotoImage(file="images/Ghost/pink_down_frame2.png")
 
         # making Ghost face in the right direction (to begin with)
         self.canvas.itemconfig(self.ghost, image=self.right_frame1)
@@ -653,13 +653,13 @@ class Blinky(Ghost):
         self.left_frame2 = PhotoImage(file="images/Ghost/red_left_frame2.png")
 
         self.right_frame1 = PhotoImage(file="images/Ghost/red_right_frame1.png")
-        self.right_frame1 = PhotoImage(file="images/Ghost/red_right_frame2.png")
+        self.right_frame2 = PhotoImage(file="images/Ghost/red_right_frame2.png")
 
         self.up_frame1 = PhotoImage(file="images/Ghost/red_up_frame1.png")
         self.up_frame2 = PhotoImage(file="images/Ghost/red_up_frame2.png")
 
         self.down_frame1 = PhotoImage(file="images/Ghost/red_down_frame1.png")
-        self.down_frame1 = PhotoImage(file="images/Ghost/red_down_frame2.png")
+        self.down_frame2 = PhotoImage(file="images/Ghost/red_down_frame2.png")
 
         # making Ghost face in the right direction (to begin with)
         self.canvas.itemconfig(self.ghost, image=self.right_frame1)
@@ -675,13 +675,13 @@ class Inky(Ghost):
         self.left_frame2 = PhotoImage(file="images/Ghost/blue_left_frame2.png")
 
         self.right_frame1 = PhotoImage(file="images/Ghost/blue_right_frame1.png")
-        self.right_frame1 = PhotoImage(file="images/Ghost/blue_right_frame2.png")
+        self.right_frame2 = PhotoImage(file="images/Ghost/blue_right_frame2.png")
 
         self.up_frame1 = PhotoImage(file="images/Ghost/blue_up_frame1.png")
         self.up_frame2 = PhotoImage(file="images/Ghost/blue_up_frame2.png")
 
         self.down_frame1 = PhotoImage(file="images/Ghost/blue_down_frame1.png")
-        self.down_frame1 = PhotoImage(file="images/Ghost/blue_down_frame2.png")
+        self.down_frame2 = PhotoImage(file="images/Ghost/blue_down_frame2.png")
 
         # making Ghost face in the right direction (to begin with)
         self.canvas.itemconfig(self.ghost, image=self.right_frame1)
@@ -697,13 +697,13 @@ class Clyde(Ghost):
         self.left_frame2 = PhotoImage(file="images/Ghost/orange_left_frame2.png")
 
         self.right_frame1 = PhotoImage(file="images/Ghost/orange_right_frame1.png")
-        self.right_frame1 = PhotoImage(file="images/Ghost/orange_right_frame2.png")
+        self.right_frame2 = PhotoImage(file="images/Ghost/orange_right_frame2.png")
 
         self.up_frame1 = PhotoImage(file="images/Ghost/orange_up_frame1.png")
-        self.up_frame1 = PhotoImage(file="images/Ghost/orange_up_frame2.png")
+        self.up_frame2 = PhotoImage(file="images/Ghost/orange_up_frame2.png")
 
         self._down_frame1 = PhotoImage(file="images/Ghost/orange_down_frame1.png")
-        self.down_frame1 = PhotoImage(file="images/Ghost/orange_down_frame2.png")
+        self.down_frame2 = PhotoImage(file="images/Ghost/orange_down_frame2.png")
 
         # making Ghost face in the right direction (to begin with)
         self.canvas.itemconfig(self.ghost, image=self.right_frame1)
