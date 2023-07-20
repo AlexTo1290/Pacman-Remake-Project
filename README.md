@@ -9,8 +9,9 @@ As the level increments, these parameters are increased.
 
 The aim of this project is to create an entertaining game using the Tkinter library which uses pathfinding algorithms as a way of improving the overall game mechanics.
 
-## Credits
+## About
 Developed by: Alex To.
+
 Date started: 25/11/2022 (First Year Semester 1)
 
 This game is not to be released commercially.
