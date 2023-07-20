@@ -1,6 +1,5 @@
 # COMP16321-Labs
 
-A remake of the Pacman arcade game.
 
 ## Description
 This is a remake of the Pac-man arcade game in Python using the Tkinter library. Pathfinding algorithms have been utilised to calculate the ghost's paths to the user.
