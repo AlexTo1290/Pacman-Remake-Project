@@ -22,4 +22,5 @@ Developed by: Alex To.
 
 Date started: 25/11/2022 (First Year Semester 1)
 
-**This game is not to be released commercially.**
+
+##### **This game is not to be released commercially.**
