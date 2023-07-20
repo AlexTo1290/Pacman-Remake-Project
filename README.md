@@ -4,10 +4,14 @@
 ## Description
 This is a remake of the Pac-man arcade game in Python using the Tkinter library.
 
-**Difficulty** of the game is managed by the following parameters: _movement speed of the player_, _movement speed of ghosts_, and _probability of ghosts calculating direct path to player (per second)_. 
-As the level increments, these parameters are increased.
+### Aim of the Project
+To create an entertaining game using the Tkinter library which uses pathfinding algorithms as a way of improving the overall game mechanics.
 
-The **aim** of this project is to create an entertaining game using the Tkinter library which uses pathfinding algorithms as a way of improving the overall game mechanics.
+
+## Adjusting Difficulty of the game
+Managed by the following parameters: _movement speed of the player_, _movement speed of ghosts_, and _probability of ghosts calculating direct path to player (per second)_. 
+
+Parameters are increased as the level increments.
 
 ## About
 Developed by: Alex To.
