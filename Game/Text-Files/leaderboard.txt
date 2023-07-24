@@ -1,8 +1,8 @@
 8500,Kyle
 2510,jj
 1000,Alex
+840,Alex
 650,Pinky
 620,Alex
 500,Virgil
 430,Bill
-380,Blinky
