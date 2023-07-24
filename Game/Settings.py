@@ -1,7 +1,7 @@
 class Settings:
     """Contains the settings of the game. Static variables can be adjusted to change the game."""
-    WINDOW_WIDTH = 1600
-    WINDOW_HEIGHT = 900
+    WINDOW_WIDTH = 1920
+    WINDOW_HEIGHT = 1080
     GAME_SPEED = 30
     PACMAN_MOVE_LENGTH = 5
     GHOST_MOVE_LENGTH = 5

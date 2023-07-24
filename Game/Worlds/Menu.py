@@ -1,6 +1,7 @@
 from tkinter import PhotoImage, Canvas, Button
 from .Game import Game
 from .Leaderboard import Leaderboard
+from ..Settings import Settings
 
 class Menu:
     """Creates the menu of the game"""
@@ -11,7 +12,7 @@ class Menu:
         self.background = PhotoImage(file="Game\images\menu_background.png")
 
         # Creating the canvas
-        self.canvas = Canvas(self.window, width=1600, height=900, background="#141414")
+        self.canvas = Canvas(self.window, width=Settings.WINDOW_WIDTH, height=Settings.WINDOW_HEIGHT, background="#141414")
         self.canvas.create_image(800, 450, image=self.background)
 
         # Adding buttons to the menu

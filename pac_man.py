@@ -4,15 +4,14 @@
 
 # NOTE: WINDOW IS 1600X900. PLEASE SET ASPECT RATIO TO THIS BEFORE RUNNING
 
-# This program has been developed for COMP16321 Introduction to Programming 1 Coursework 2. It is a Pac man game with a
-# menu, a save and load feature, a leaderboard feature, and a change controls feature.
+# This program has been developed for COMP16321 Introduction to Programming 1 Coursework 2. It is a recreation of the arcade game
+# 'Pac-man' game with a menu, save and load feature, leaderboard feature, and change controls feature.
 
 
 from tkinter import Tk
 
 from Game.Settings import Settings
 from Game.Worlds.Menu import Menu
-
 
 
 class Main:
@@ -22,7 +21,7 @@ class Main:
         self.window = Tk()
         self.window.geometry(str(Settings.WINDOW_WIDTH) + "x" + str(Settings.WINDOW_HEIGHT))
         self.window.title("Pac-man")
-        self.window.attributes("-fullscreen", True)   # uncommnet to make full screen
+        self.window.attributes("-fullscreen", True)   # uncommnent to make full screen
 
         # creating the menu
         menu = Menu(self.window)

@@ -22,8 +22,9 @@ class Game:
         self.menu = menu
 
         self.junctions = []  # holds a list of the junction objects
+        self.are_junctions_visible = False;
         self.paths_graph = defaultdict(list)  # holds a dictionary representing the graph of junctions
-        # connected by paths. Graph format per entry::  junction(no): [[junction(no2), direction], ...]
+        # connected by paths. Graph format per entry::  junction(no): [[junction(no2), direction, weight], ...]
 
         self.coins = []
         self.ghosts = []
@@ -138,9 +139,34 @@ class Game:
         self.canvas.bind('<Up>', self.pacman.change_direction_up)
         self.canvas.bind('<Down>', self.pacman.change_direction_down)
         self.canvas.bind('p', self.pause_game_by_button_press)
+        # self.canvas.bind('r', self.calculate_path_weights)
+        self.canvas.bind('j', self.toggle_junctions_visiblity)
 
         self.canvas.bind_all("<Button-1>", lambda event: event.widget.focus_set())
         self.canvas.focus_set()
+
+    def calculate_path_weights(self, event):
+        """Calculates the weights of paths in the file paths.txt (function to be called once). This assumes that entries in the file
+        are in the form JUNCTION_FROM,JUNCTION_TO,DIRECTION.  Each entry in the file is modified to the form
+        JUNCTION_FROM,JUNCTION_TO,DIRECTION,WEIGHT"""
+        
+        paths = open("Game/Text-Files/paths.txt", "r")
+        new_paths = open("Game/Text-Files/new_paths.txt", "a")
+
+        for line in paths:
+            line = line.strip("\n")
+            entry = line.split(",")
+            
+            x_diff = abs(self.junctions[int(entry[0])].getx() - self.junctions[int(entry[1])].getx())
+            y_diff = abs(self.junctions[int(entry[0])].gety() - self.junctions[int(entry[1])].gety())
+            
+            total_diff = str(x_diff + y_diff)
+            entry.append(total_diff)
+
+            line = ",".join(entry)
+            line += "\n"
+            print(line)
+            new_paths.write(line)
 
     def change_left_binding(self):
         """Changes the move left key binding to the key specified in the change left key binding text field"""
@@ -585,6 +611,16 @@ class Game:
             self.junctions.append(junction)
             # junction.show()    # uncomment this line to display the junctions
 
+    def toggle_junctions_visiblity(self, event):
+        if not self.are_junctions_visible:
+            for junction in self.junctions:
+                junction.show()
+        else:
+            for junction in self.junctions:
+                junction.hide()
+        
+        self.are_junctions_visible = not self.are_junctions_visible
+
     def create_paths(self):
         """Creates all the paths from junction to junction appending each path to the instance variables paths_graph"""
         file = open("Game/Text-Files/paths.txt", "r")
@@ -596,8 +632,9 @@ class Game:
             start = current_line[0]
             end = current_line[1]
             direction = current_line[2]
+            weight = current_line[3]
 
-            path = [end, direction]
+            path = [end, direction, weight]
 
             self.paths_graph[start].append(path)
 
@@ -751,10 +788,9 @@ class Game:
 
                         # attempting to change the ghost's direction if possible
                         if ghost.next_direction == []:
-                            if random.randint(1, 3) == 1:
-                                # giving a 2/3 chance of a random direction change of the ghost
-                                ghost.randomise_direction()
+                            ghost.randomise_direction()  # randomising the ghost's direction
                         else:
+                            # changing the direction to the next direction in the queue of direction changes
                             if ghost.next_direction[0] == "left":
                                 if ghost.get_can_move_left():
                                     ghost.set_direction("left")
@@ -798,6 +834,9 @@ class Game:
 
         if is_collision:
             self.game_end(False)
+
+    def find_shortest_path(self, junction_number_from, junction_number_to):
+        pass
 
     def update_score(self):
         """Updates the score display to the user to the value in the instance variable 'score'"""

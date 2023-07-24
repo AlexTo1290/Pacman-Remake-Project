@@ -16,7 +16,7 @@ class Clyde(Ghost):
         self.up_frame1 = PhotoImage(file="Game/images/Ghost/orange_up_frame1.png")
         self.up_frame2 = PhotoImage(file="Game/images/Ghost/orange_up_frame2.png")
 
-        self._down_frame1 = PhotoImage(file="Game/images/Ghost/orange_down_frame1.png")
+        self.down_frame1 = PhotoImage(file="Game/images/Ghost/orange_down_frame1.png")
         self.down_frame2 = PhotoImage(file="Game/images/Ghost/orange_down_frame2.png")
 
         # making Ghost face in the right direction (to begin with)
