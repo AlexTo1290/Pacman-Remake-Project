@@ -49,7 +49,7 @@ class Ghost:
                 self.can_move_left = True
                 self.can_move_right = True
             else:
-                # the ghost is unable to move in current direction so must be going into a wall. Changing to a randome
+                # the ghost is unable to move in current direction so must be going into a wall. Changing to a random
                 # valid direction
                 self.randomise_direction()
 
@@ -92,9 +92,6 @@ class Ghost:
                 # valid direction
                 self.randomise_direction()
 
-    def calculate_shortest_path_to_player(self):
-        pass
-
     def get_direction(self):
         """Returns the direction the ghost is travelling in"""
         return self.direction
@@ -102,6 +99,15 @@ class Ghost:
     def set_direction(self, direction):
         """Sets the direction to the direction given in the parameter"""
         self.direction = direction
+
+    def set_next_direction(self, next_direction):
+        self.next_direction = next_direction
+    
+    def get_next_direction(self):
+        return self.next_direction
+    
+    def clear_next_direction(self):
+        self.next_direction = []
 
     def change_direction_left(self):
         """Changes the instance variable direction to left when left is valid. Otherwise, setting instance variable

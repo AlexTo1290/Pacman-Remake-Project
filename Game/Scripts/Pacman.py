@@ -18,6 +18,12 @@ class Pacman:
     # ahead of time (e.g. press right arrow before a right junction. When the right junction is
     # approached, automatically turn right)
 
+    # variables used for ghost path-finding (to catch Pac-man)
+    # previous_junction = 0  # stores the junction Pac-man was last at
+    # next_junction = 0  # store the junction Pac-man is travelling to
+    last_junction = 0
+
+
     def __init__(self, canvas):
         self.canvas = canvas
 
@@ -174,7 +180,8 @@ class Pacman:
         """Changes the instance variable direction to left when left is valid. Otherwise, setting instance variable
         next_direction to left so that the next available left direction change will be taken"""
         if self.can_move_left:
-            self.direction = "left"
+            if self.direction != "left":
+                self.direction = "left"
         else:
             self.next_direction = "left"
 
@@ -182,7 +189,8 @@ class Pacman:
         """Changes the instance variable direction to right when right is valid. Otherwise, setting instance variable
         next_direction to right so that the next available right direction change will be taken"""
         if self.can_move_right:
-            self.direction = "right"
+            if self.direction != "right":
+                self.direction = "right"
         else:
             self.next_direction = "right"
 
@@ -190,7 +198,8 @@ class Pacman:
         """Changes the instance variable direction to up if up is valid. Otherwise, setting instance variable
         next_direction to up so that the next available up direction change will be taken"""
         if self.can_move_up:
-            self.direction = "up"
+            if self.direction != "up":
+                self.direction = "up"
         else:
             self.next_direction = "up"
 
@@ -198,7 +207,8 @@ class Pacman:
         """Changes the instance variable direction to down if down is valid. Otherwise, setting instance variable
         next_direction to down so that the next available down direction change will be taken"""
         if self.can_move_down:
-            self.direction = "down"
+            if self.direction != "down":
+                self.direction = "down"
         else:
             self.next_direction = "down"
 
@@ -224,6 +234,12 @@ class Pacman:
     def set_can_move_down(self, can_move_down):
         """Changes the boolean value held in can_move_down to the parameter value"""
         self.can_move_down = can_move_down
+    
+    def set_last_junction(self, last_junction):
+        self.last_junction = last_junction
+    
+    def get_last_junction(self):
+        return self.last_junction
 
     def get_bbox(self):
         """Returns the boundary coordinates of pacman"""

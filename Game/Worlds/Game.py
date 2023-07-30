@@ -1,6 +1,7 @@
 from tkinter import PhotoImage, Button, Label, Entry
 from collections import defaultdict
 import random
+import sys
 
 from ..Settings import Settings
 
@@ -609,7 +610,7 @@ class Game:
 
             junction = Junction(self.canvas, junction_number, x, y)
             self.junctions.append(junction)
-            # junction.show()    # uncomment this line to display the junctions
+            
 
     def toggle_junctions_visiblity(self, event):
         if not self.are_junctions_visible:
@@ -744,6 +745,9 @@ class Game:
                     elif current_direction == "down":
                         self.pacman.set_can_move_down(True)
 
+                # Updating the junction Pac-man is travelling to (and from)
+                self.pacman.set_last_junction(junction.get_junction_number())
+
     def check_ghost_junction_collisions(self):
         """Checks if the ghosts are at a new junction. If so, the directions the ghosts can travel are updated
         (individually)"""
@@ -786,35 +790,54 @@ class Game:
                         elif current_direction == "down":
                             ghost.set_can_move_down(True)
 
-                        # attempting to change the ghost's direction if possible
-                        if ghost.next_direction == []:
-                            ghost.randomise_direction()  # randomising the ghost's direction
-                        else:
-                            # changing the direction to the next direction in the queue of direction changes
-                            if ghost.next_direction[0] == "left":
-                                if ghost.get_can_move_left():
-                                    ghost.set_direction("left")
-                                    ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-
-                            elif ghost.next_direction[0] == "right":
-                                if ghost.get_can_move_right():
-                                    ghost.set_direction("right")
-                                    ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-
-                            elif ghost.next_direction[0] == "up":
-                                if ghost.get_can_move_up():
-                                    ghost.set_direction("up")
-                                    ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-
-                            elif ghost.next_direction[0] == "down":
-                                if ghost.get_can_move_down():
-                                    ghost.set_direction("down")
-                                    ghost.next_direction.pop(0)     # removes this "next" direction from the queue
-
                         # checking if this junction is the entrance of the ghost spawn box (junction 74). If it is,
                         # then forcing the ghost to move up and out of the box
                         if junction.get_junction_number() == 74:
                             ghost.change_direction_up()  # changing the ghost's direction to up
+
+                    # attempting to change the ghost's direction if possible
+                    # giving a chance that the ghost will go directly to the user (if outside of spawn)
+                    if (int(junction.get_junction_number()) < 68 or int(junction.get_junction_number()) > 83):
+                        self.direct_path_chance(ghost, junction)
+                    
+                    if isinstance(ghost, Blinky): print(ghost.next_direction)
+
+                    if ghost.get_next_direction() == []:
+                        ghost.randomise_direction()  # randomising the ghost's direction
+                    else:
+                        # changing the direction to the next direction in the queue of direction changes
+                        if ghost.next_direction[0] == "left":
+                            if ghost.get_can_move_left():
+                                ghost.set_direction("left")
+                                print("move left")
+                                print(ghost.next_direction)
+                                ghost.next_direction.pop(0)  # removes this "next" direction from the queue
+                                print(ghost.next_direction)
+
+                        elif ghost.next_direction[0] == "right":
+                            if ghost.get_can_move_right():
+                                ghost.set_direction("right")
+                                print("move right")
+                                print(ghost.next_direction)
+                                ghost.next_direction.pop(0)  # removes this "next" direction from the queue
+                                print(ghost.next_direction)
+
+                        elif ghost.next_direction[0] == "up":
+                            if ghost.get_can_move_up():
+                                ghost.set_direction("up")
+                                print("move up")
+                                print(ghost.next_direction)
+                                ghost.next_direction.pop(0)  # removes this "next" direction from the queue
+                                print(ghost.next_direction)
+
+                        elif ghost.next_direction[0] == "down":
+                            if ghost.get_can_move_down():
+                                ghost.set_direction("down")
+                                print("move down")
+                                print(ghost.next_direction)
+                                ghost.next_direction.pop(0)  # removes this "next" direction from the queue
+                                print(ghost.next_direction)
+
 
     def check_pacman_ghost_collisions(self):
         """Checks whether pacman is colliding with any of the ghosts. If it is, then the method decreases the lives
@@ -833,10 +856,131 @@ class Game:
                 break
 
         if is_collision:
-            self.game_end(False)
+            self.game_end(False)    
 
-    def find_shortest_path(self, junction_number_from, junction_number_to):
-        pass
+    def direct_path_chance(self, ghost, junction):
+        """Gives a chance for the ghost to travel directly to the user"""
+
+        findPath = False
+        num = random.random()
+
+        # Stimulating pinky's chance
+        if isinstance(ghost, Pinky):
+            if num <= Settings.PINKY_PATH_FIND_PROB:
+                findPath = True
+
+        elif isinstance(ghost, Inky):
+            if num <= Settings.INKY_PATH_FIND_PROB:
+                findPath = True
+        
+        elif isinstance(ghost, Clyde):
+            if num <= Settings.CLYDE_PATH_FIND_PROB:
+                findPath = True
+        
+        elif isinstance(ghost, Blinky):
+            if num <= Settings.BLINKY_PATH_FIND_PROB:
+                findPath = True
+        
+        if findPath:
+            # Giving direct path directions for the ghost to reach the user
+            
+            # finding the junction pacman is going towards
+            end_junction = self.pacman.get_last_junction()
+            possible_junctions = self.paths_graph[self.pacman.get_last_junction()]
+
+            for current in possible_junctions:
+                if current[1] == self.pacman.get_direction():
+                    end_junction = current[0]
+                    break
+
+            path = self.find_shortest_path(junction, end_junction)
+            print("\n")
+            print("start: " + str(junction.get_junction_number()))
+            print("end: " + str(end_junction))
+            directions = []
+            print(path)
+
+            for i in range(len(path) - 1):
+                directions.append(path[i][1])
+            
+            # adding final direction (opposite direction of pacman)
+            if self.pacman.get_direction() == "up":
+                directions.append("down")
+            elif self.pacman.get_direction() == "down":
+                directions.append("up")
+            elif self.pacman.get_direction() == "right":
+                directions.append("left")
+            elif self.pacman.get_direction() == "left":
+                directions.append("right")
+            print(directions)
+            print("\n")
+            ghost.set_next_direction(directions)
+
+
+
+
+    def find_shortest_path(self, start_junction, end_junction):
+        """Returns the shortest path from one junction to another"""
+        previous_junctions = self.dijkstras_algorithm(start_junction)[0]
+
+        path = []
+        current_junction = [end_junction, None]
+
+        while current_junction[0] != start_junction.get_junction_number():
+            path.append(current_junction)
+            current_junction = previous_junctions[current_junction[0]]
+        
+        path.append(current_junction)
+        path.reverse()
+
+        return path
+    
+
+    def dijkstras_algorithm(self, start_junction):
+        """Uses Dijstra's shortest path algorithm to find the shortest path from a junction to every other junction"""
+        unvisited_junctions = list(self.junctions)
+        # Removing the one-directional junctions from unvisited_junctions
+        for i in range(68, 84):
+            unvisited_junctions.pop(68)
+
+        shortest_path = {}  # stores the best known cost to travel to each junction
+        previous_junctions = {}  # stores the previous junctions visited to reach the end junction
+
+        # Setting the cost to each junction as infinity
+        max_value = sys.maxsize  # stores "infinity"
+        
+        for junction in unvisited_junctions:
+            shortest_path[junction.get_junction_number()] = max_value
+        
+        shortest_path[start_junction.get_junction_number()] = 0   # start node has travel cost of 0
+        
+        # Main loop
+        while unvisited_junctions:
+            # finding the junction with the shortest known distance from the start node
+            current_min_junction = None
+
+            for junction in unvisited_junctions:
+                if current_min_junction == None:
+                    current_min_junction = junction.get_junction_number()
+                elif shortest_path[junction.get_junction_number()] < shortest_path[current_min_junction]:
+                    current_min_junction = junction.get_junction_number()
+
+            # visiting current_min_junction and updating its neighbors shortest path (if new path is shorter than previous path)
+            neighbors = self.paths_graph[current_min_junction]
+
+            for neighbor in neighbors:
+                # (each entry of neighbor consists of the list [junction_num, direction, weight])
+                tentative_value = shortest_path[current_min_junction] + int(neighbor[2])
+
+                # checking if the new-found path to the neighboring junction is shorter than the previously known path to this juncion
+                if tentative_value < shortest_path[neighbor[0]]:
+                    shortest_path[neighbor[0]] = tentative_value    
+                    previous_junctions[neighbor[0]] = [current_min_junction, neighbor[1]]  # ERROR ---------------
+            
+            # marking the current junction as "visited"
+            unvisited_junctions.remove(self.junctions[int(current_min_junction)])
+    
+        return previous_junctions, shortest_path
 
     def update_score(self):
         """Updates the score display to the user to the value in the instance variable 'score'"""
