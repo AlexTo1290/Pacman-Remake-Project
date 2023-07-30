@@ -36,6 +36,11 @@ class Game:
         self.is_leave = False
         self.game_speed = Settings.GAME_SPEED
 
+        self.pinky_path_find_prob = Settings.PINKY_PATH_FIND_PROB
+        self.inky_path_find_prob = Settings.INKY_PATH_FIND_PROB
+        self.blinky_path_find_prob = Settings.BLINKY_PATH_FIND_PROB
+        self.clyde_path_find_prob = Settings.CLYDE_PATH_FIND_PROB
+
         # creating the canvas
         self.background = PhotoImage(file="Game/images/pac_man_background.png")
         self.canvas = canvas
@@ -166,7 +171,7 @@ class Game:
 
             line = ",".join(entry)
             line += "\n"
-            print(line)
+
             new_paths.write(line)
 
     def change_left_binding(self):
@@ -799,8 +804,6 @@ class Game:
                     # giving a chance that the ghost will go directly to the user (if outside of spawn)
                     if (int(junction.get_junction_number()) < 68 or int(junction.get_junction_number()) > 83):
                         self.direct_path_chance(ghost, junction)
-                    
-                    if isinstance(ghost, Blinky): print(ghost.next_direction)
 
                     if ghost.get_next_direction() == []:
                         ghost.randomise_direction()  # randomising the ghost's direction
@@ -809,34 +812,22 @@ class Game:
                         if ghost.next_direction[0] == "left":
                             if ghost.get_can_move_left():
                                 ghost.set_direction("left")
-                                print("move left")
-                                print(ghost.next_direction)
                                 ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-                                print(ghost.next_direction)
 
                         elif ghost.next_direction[0] == "right":
                             if ghost.get_can_move_right():
                                 ghost.set_direction("right")
-                                print("move right")
-                                print(ghost.next_direction)
                                 ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-                                print(ghost.next_direction)
 
                         elif ghost.next_direction[0] == "up":
                             if ghost.get_can_move_up():
                                 ghost.set_direction("up")
-                                print("move up")
-                                print(ghost.next_direction)
                                 ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-                                print(ghost.next_direction)
 
                         elif ghost.next_direction[0] == "down":
                             if ghost.get_can_move_down():
                                 ghost.set_direction("down")
-                                print("move down")
-                                print(ghost.next_direction)
                                 ghost.next_direction.pop(0)  # removes this "next" direction from the queue
-                                print(ghost.next_direction)
 
 
     def check_pacman_ghost_collisions(self):
@@ -866,19 +857,19 @@ class Game:
 
         # Stimulating pinky's chance
         if isinstance(ghost, Pinky):
-            if num <= Settings.PINKY_PATH_FIND_PROB:
+            if num <= self.pinky_path_find_prob:
                 findPath = True
 
         elif isinstance(ghost, Inky):
-            if num <= Settings.INKY_PATH_FIND_PROB:
+            if num <= self.inky_path_find_prob:
                 findPath = True
         
         elif isinstance(ghost, Clyde):
-            if num <= Settings.CLYDE_PATH_FIND_PROB:
+            if num <= self.clyde_path_find_prob:
                 findPath = True
         
         elif isinstance(ghost, Blinky):
-            if num <= Settings.BLINKY_PATH_FIND_PROB:
+            if num <= self.blinky_path_find_prob:
                 findPath = True
         
         if findPath:
@@ -894,11 +885,7 @@ class Game:
                     break
 
             path = self.find_shortest_path(junction, end_junction)
-            print("\n")
-            print("start: " + str(junction.get_junction_number()))
-            print("end: " + str(end_junction))
             directions = []
-            print(path)
 
             for i in range(len(path) - 1):
                 directions.append(path[i][1])
@@ -912,8 +899,7 @@ class Game:
                 directions.append("left")
             elif self.pacman.get_direction() == "left":
                 directions.append("right")
-            print(directions)
-            print("\n")
+                
             ghost.set_next_direction(directions)
 
 
@@ -990,7 +976,7 @@ class Game:
         """Updates the remaining lives the player has on the canvas"""
         self.lives_label.config(text=("Lives: " + str(self.lives)))
 
-    def update_level(self):
+    def update_level_label(self):
         """Updates the level label on the canvas with the value held in the 'level' instance variable"""
         self.level_label.config(text=("Level: " + str(self.level)))
 
@@ -1006,7 +992,7 @@ class Game:
 
             # incrementing the level
             self.level += 1
-            self.update_level()
+            self.update_level_label()
 
             # starting new round
             self.next_round()
@@ -1109,7 +1095,13 @@ class Game:
         self.create_coins()
 
         # increasing game speed (to increase difficulty)
-        self.game_speed = int(self.game_speed * 0.6)
+        self.game_speed = int(self.game_speed * 0.7)
+
+        # increasing the probability of ghosts finding direct path to the user
+        self.blinky_path_find_prob *= 1.25
+        self.pinky_path_find_prob *= 1.25
+        self.inky_path_find_prob *= 1.125
+        self.clyde_path_find_prob *= 1.125
 
     def game_loop(self):
         """Method that starts the game. This method will repeat the same block of code (move pacman, change pacman

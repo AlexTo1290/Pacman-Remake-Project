@@ -9,7 +9,7 @@ class Settings:
     SCORE_INCREASE_ON_WIN = 500
 
     # Probably of each ghost calculating its direct path to the player (per game tick)
-    INKY_PATH_FIND_PROB = 0.5
-    PINKY_PATH_FIND_PROB = 0.5
-    BLINKY_PATH_FIND_PROB = 0.5
-    CLYDE_PATH_FIND_PROB = 0.5
+    INKY_PATH_FIND_PROB = 0.1
+    PINKY_PATH_FIND_PROB = 0.1
+    BLINKY_PATH_FIND_PROB = 0.1
+    CLYDE_PATH_FIND_PROB = 0.1
