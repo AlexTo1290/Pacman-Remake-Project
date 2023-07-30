@@ -97,6 +97,10 @@ class Menu:
 
         # switching to the leaderboard screen
         leaderboard = Leaderboard(self.window, self, self.canvas)
+    
+    def display_leaderboard_after_game_end(self, canvas, score, level):
+        leaderboard = Leaderboard(self.window, self, canvas, score, level)
+        
 
     def exit_game(self):
         """Closes the window - terminates the program"""

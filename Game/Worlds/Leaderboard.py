@@ -1,7 +1,5 @@
 from tkinter import Tk, PhotoImage, Label, Entry, Button
 
-import Game
-
 class Leaderboard:
     """Displays the leaderboard screen to the user"""
     def __init__(self, window, menu, canvas, score=None, level=None):
@@ -98,7 +96,8 @@ class Leaderboard:
         self.title.destroy()    # removes the title from the window
 
         # starting new game
-        game = Game(self.window, self.menu, self.canvas, True)
+        # game = Game(self.window, self.menu, self.canvas, True)
+        self.menu.start_game()
 
     def update_leaderboard(self):
         """Updates the leaderboard with the new score"""

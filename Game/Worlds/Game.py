@@ -1155,7 +1155,7 @@ class Game:
 
     def show_leaderboard(self):
         """Displays the leaderboard to the user and tries"""
-        leaderboard = Leaderboard(self.window, self.menu, self.canvas, self.score, self.level)
+        self.menu.display_leaderboard_after_game_end(self.canvas, self.score, self.level)
 
 
 
