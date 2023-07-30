@@ -16,7 +16,6 @@ Managed by the following parameters: _movement speed of the player_, _movement s
 Parameters are increased as the level increments.
 
 ## TO-DOs
-- Adding pathfinding for the ghosts.
 - Add powerups in the game.
 
 ## About
