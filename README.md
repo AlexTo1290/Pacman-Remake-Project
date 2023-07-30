@@ -3,6 +3,9 @@
 ## Description
 This is a remake of the Pac-man arcade game coded in Python and using the Tkinter library.
 
+### How to run the game
+Execute the **pac_man.py** file.
+
 ### Aim of the Project
 To create a game using the Tkinter library that uses pathfinding algorithms.
 
