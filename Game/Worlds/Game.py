@@ -23,11 +23,12 @@ class Game:
         self.menu = menu
 
         self.junctions = []  # holds a list of the junction objects
-        self.are_junctions_visible = False;
+        self.are_junctions_visible = False
         self.paths_graph = defaultdict(list)  # holds a dictionary representing the graph of junctions
         # connected by paths. Graph format per entry::  junction(no): [[junction(no2), direction, weight], ...]
 
         self.coins = []
+        self.hidden_coins = []
         self.ghosts = []
         self.score = 0
         self.level = 1
@@ -401,12 +402,20 @@ class Game:
                 file.write("0\n")  # writing 0 if false
         file.close()
 
-        # writing location of existing coins into file
+        # writing location of coins into files
         file = open("Game/save/coins.txt", "w")
 
         # looping through every coin in coins and writing their coordinates in each line of the file in format "x,y"
         for index in range(len(self.coins)):
             coin = self.coins[index]
+            x = coin.getx()
+            y = coin.gety()
+            file.write(str(x) + "," + str(y) + "\n")
+
+        file.close()
+
+        file = open("Game/save/hidden_coins.txt", "w")
+        for coin in self.hidden_coins:
             x = coin.getx()
             y = coin.gety()
             file.write(str(x) + "," + str(y) + "\n")
@@ -449,6 +458,38 @@ class Game:
 
             self.lives = lives
             self.update_lives()
+
+            # Loading the coins into the game
+            file = open("Game/save/coins.txt", "r")
+
+            for line in file:
+                current_line = line[:-1].split(",")  # splitting the line into an array. Array x and y coords [x,y]
+
+                x = int(current_line[0])
+                y = int(current_line[1])
+
+                # creating current coin and adding it to the canvas
+                coin = Coin(self.canvas, x, y)
+                self.coins.append(coin)
+                self.canvas.tag_lower(coin.coin, self.pacman.pacman)    # ensures that the coin coin image is behind pac-man and the ghosts
+
+            file.close()
+
+            file = open("Game/save/hidden_coins.txt", "r")
+
+            for line in file:
+                current_line = line[:-1].split(",")  # splitting the line into an array. Array x and y coords [x,y]
+
+                x = int(current_line[0])
+                y = int(current_line[1])
+
+                # creating the coin and making it hidden
+                coin = Coin(self.canvas, x, y)
+                self.canvas.itemconfigure(coin.coin, state="hidden")
+                self.canvas.coords(coin.coin, 100, 100)
+
+                self.hidden_coins.append(coin)
+                self.canvas.tag_lower(coin.coin, self.pacman.pacman)    # ensures that the coin coin image is behind pac-man and the ghosts
 
             # Loading pacman's state from files into the game
             file = open("Game/save/pacman.txt", "r")
@@ -564,20 +605,6 @@ class Game:
             self.blinky.set_can_move_up(can_move_up)
             self.blinky.set_can_move_down(can_move_down)
 
-            # Loading the coins into the game
-            file = open("Game/save/coins.txt", "r")
-
-            for line in file:
-                current_line = line[:-1].split(",")  # splitting the line into an array. Array x and y coords [x,y]
-
-                x = int(current_line[0])
-                y = int(current_line[1])
-
-                # creating current coin and adding it to the canvas
-                coin = Coin(self.canvas, x, y)
-                self.coins.append(coin)
-
-            file.close()
 
         except Exception:
             # Error was found when trying to load one of the files. Aborting load and creating new game
@@ -616,7 +643,6 @@ class Game:
             junction = Junction(self.canvas, junction_number, x, y)
             self.junctions.append(junction)
             
-
     def toggle_junctions_visiblity(self, event):
         if not self.are_junctions_visible:
             for junction in self.junctions:
@@ -681,7 +707,13 @@ class Game:
                 # Player is touching the coin. Updating the score and removing the coin from the game
                 self.score += Settings.SCORE_INCREASE_ON_COIN
                 self.update_score()
-                coin.leave_canvas()
+
+                # Making the coin invisible to the user
+                self.canvas.itemconfigure(coin.coin, state='hidden')
+                self.canvas.coords(coin.coin, 100, 100)         # moving the coin to the top left of the screen
+                self.hidden_coins.append(coin)
+
+                # coin.leave_canvas()
             else:
                 # Pacman is not touching the current coin
                 not_touching_pacman.append(self.coins[index])
@@ -829,7 +861,6 @@ class Game:
                                 ghost.set_direction("down")
                                 ghost.next_direction.pop(0)  # removes this "next" direction from the queue
 
-
     def check_pacman_ghost_collisions(self):
         """Checks whether pacman is colliding with any of the ghosts. If it is, then the method decreases the lives
         and resets the round"""
@@ -899,11 +930,8 @@ class Game:
                 directions.append("left")
             elif self.pacman.get_direction() == "left":
                 directions.append("right")
-                
+
             ghost.set_next_direction(directions)
-
-
-
 
     def find_shortest_path(self, start_junction, end_junction):
         """Returns the shortest path from one junction to another"""
@@ -921,7 +949,6 @@ class Game:
 
         return path
     
-
     def dijkstras_algorithm(self, start_junction):
         """Uses Dijstra's shortest path algorithm to find the shortest path from a junction to every other junction"""
         unvisited_junctions = list(self.junctions)
@@ -1056,7 +1083,7 @@ class Game:
         self.show_leaderboard()
 
     def reset_object_positions(self):
-        """Puts the objects (pacman and the ghosts) back at their start positions"""
+        """Puts the objects (pacman, the ghosts, and the coins) back at their start positions"""
         # Placing pacman and the ghost back to their start positions
         self.pacman.set_coordinates(770, 610)  # placing pacman at its start position
 
@@ -1073,7 +1100,7 @@ class Game:
         for i in range(len(self.ghosts)):
             ghost = self.ghosts[i]
             ghost.reset_valid_directions()
-
+        
         self.pinky.set_can_move_down(True)
         self.pinky.set_can_move_right(True)
         self.clyde.set_can_move_left(True)
@@ -1090,9 +1117,15 @@ class Game:
             coin = self.coins[index]
             self.canvas.delete(coin)
 
-        # clearing the coins array and then adding new coins to the game
-        self.coins.clear()
-        self.create_coins()
+        # resetting the coins
+        # self.coins.clear()
+        # self.create_coins()
+        self.coins.extend(self.hidden_coins)
+        self.hidden_coins.clear()
+
+        for coin in self.coins:
+            self.canvas.itemconfigure(coin.coin, state="normal")
+            self.canvas.coords(coin.coin, coin.getx(), coin.gety())
 
         # increasing game speed (to increase difficulty)
         self.game_speed = int(self.game_speed * 0.7)
@@ -1102,6 +1135,12 @@ class Game:
         self.pinky_path_find_prob *= 1.25
         self.inky_path_find_prob *= 1.125
         self.clyde_path_find_prob *= 1.125
+
+        # # bringing pac-man and the ghosts images in front of the coins
+        # self.canvas.lift(self.pacman)
+        
+        # for ghost in self.ghosts:
+        #     self.canvas.lift(ghost)
 
     def game_loop(self):
         """Method that starts the game. This method will repeat the same block of code (move pacman, change pacman

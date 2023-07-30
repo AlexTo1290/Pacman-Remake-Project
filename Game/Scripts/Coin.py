@@ -11,7 +11,7 @@ class Coin:
         self.image = PhotoImage(file="Game/images/coin_image.png")
 
         # Placing the image of the coin into the (x,y) coordinates
-        self.coin = self.canvas.create_image(x, y, image=self.image)
+        self.add_to_canvas()
 
     def getx(self):
         """Returns x coordinates of the coin object"""
@@ -20,6 +20,10 @@ class Coin:
     def gety(self):
         """Returns y coordinates of the coin object"""
         return self.y
+    
+    def add_to_canvas(self):
+        """Placing the image of the coin into the (x,y) coordinates"""
+        self.coin = self.canvas.create_image(self.x, self.y, image=self.image)
 
     def leave_canvas(self):
         """Removes the coin object from the canvas"""

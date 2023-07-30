@@ -55,7 +55,7 @@ class Menu:
         self.load_game_button.place(x=540, y=510)
         self.leaderboard_button.place(x=540, y=660)
         self.exit_button.place(x=70, y=750)
-
+    
     def start_game(self):
         """Creates a new game"""
         # The new game button has been clicked. Removing all objects in the menu and then moving on to the game

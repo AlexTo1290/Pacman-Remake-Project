@@ -21,7 +21,7 @@ class Pacman:
     # variables used for ghost path-finding (to catch Pac-man)
     # previous_junction = 0  # stores the junction Pac-man was last at
     # next_junction = 0  # store the junction Pac-man is travelling to
-    last_junction = 0
+    last_junction = "50"
 
 
     def __init__(self, canvas):

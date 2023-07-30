@@ -25,7 +25,7 @@ class Main:
 
         # creating the menu
         menu = Menu(self.window)
-
+        
         self.window.mainloop()
 
 
