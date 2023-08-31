@@ -1,7 +1,7 @@
 # Pac-Man
 
 ## Description
-This is a remake of the Pac-man arcade game coded in Python and using the Tkinter library.
+A remake of the Pac-man arcade game coded in Python using the Tkinter library.
 
 ### How to run the game
 Execute the **pac_man.py** file.
@@ -13,7 +13,7 @@ To create a game using the Tkinter library that uses pathfinding algorithms.
 ### Adjusting Difficulty of the game
 Managed by the following parameters: _movement speed of the player_, _movement speed of ghosts_, and _probability of ghosts calculating direct path to player_. 
 
-Parameters are increased as the level increments.
+Parameters are increased as level increases.
 
 ## TO-DOs
 - Add powerups in the game.
