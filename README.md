@@ -18,6 +18,13 @@ Parameters are increased as level increases.
 ## TO-DOs
 - Add powerups in the game.
 
+## Images
+![image](https://github.com/AlexTo1290/Pacman-Remake-Project/assets/108309040/f0d73513-76e1-497c-8c53-de1c2e33f37d)
+
+
+
+
+
 ## About
 Developed by: Alex To.
 
